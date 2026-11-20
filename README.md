@@ -1,43 +1,39 @@
-Simple Learning Chatbot
+# Simple Learning Chatbot
 
-A Python-based chatbot that learns from user interactions. It uses JSON for data persistence and the difflib library to find the closest matches to user questions. If the bot doesn't know an answer, it asks the user to teach it, expanding its knowledge base dynamically.
+A Python-based CLI chatbot that learns from user interactions. It uses JSON for data persistence and Python's built-in `difflib` library to find the closest matches to user questions. When the bot does not know an answer, it asks the user to teach it and persists the new response.
 
+## Features
 
+- **Persistent Memory**: Loads and atomically saves questions and answers in `database.json`.
+- **Fuzzy Matching**: Uses case-insensitive `difflib.get_close_matches` to handle minor typos and capitalization differences.
+- **Self-Learning**: Learns new responses interactively during chat without creating duplicate question entries.
+- **Safe CLI Handling**: Handles empty inputs, blank/whitespace `skip` responses, malformed/missing `database.json`, and `EOFError` / `KeyboardInterrupt` cleanly.
 
-Features
+## Requirements
 
-Persistent Memory: Saves and loads questions/answers from a database.json file.
+- Python 3.10+ (uses Python standard library only; no third-party dependencies required)
 
-Fuzzy Matching: Uses get_close_matches to understand questions even if they have typos.
+## Project Structure
 
-Self-Learning: Directly learns new responses from the user during the chat.
+- `Chatbot.py`: Core chatbot logic, database load/save helpers, and CLI entrypoint.
+- `database.json`: JSON knowledge base (if missing or invalid, the bot starts with an empty in-memory knowledge base and creates/updates `database.json` when you teach it a new answer).
+- `tests/test_chatbot.py`: Automated `unittest` suite covering database persistence, matching, and the interactive chat loop.
 
-Portable Paths: Uses the os module to automatically handle file paths regardless of the operating system.
+## How to Run
 
+```bash
+python Chatbot.py
+```
 
+### Commands During Chat
 
-Requirements
+- Type any question in the terminal and press `Enter`.
+- If the bot does not know the answer, type the response you want it to learn.
+- Type `skip` (or leave the answer blank) if you do not want to teach that question.
+- Type `exit` (or press `Ctrl+C` / `Ctrl+D` / `Ctrl+Z`) to close the program.
 
-Python 3.x
+## How to Test
 
-
-
-
-Project Structure
-
-main.py: The core logic of the chatbot.
-
-database.json: The storage file where the bot's knowledge is kept (automatically created on first run).
-
-
-
-
-How to Use
-
-Type your question in the terminal.
-
-If the bot doesn't know the answer, type the response you want it to learn.
-
-Type skip if you don't want to teach that specific question.
-
-Type exit to close the program.
+```bash
+python -m unittest discover -s tests -v
+```
